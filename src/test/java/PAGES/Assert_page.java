@@ -8,19 +8,21 @@ import BASE_CLASSES.Utilities;
 
 public class Assert_page {
 	WebDriver driver;
-	Utilities ult;
+	Utilities Utils;
+	By SubTotal=By.xpath("//td[@colspan='7']//child::span");
+	
 	public Assert_page(WebDriver driver) 
 	{
 		this.driver=driver;
-		ult=new Utilities(driver);
+		Utils=new Utilities(driver);
 	}
+	
 	//To get the value of total price of the product
 	public String Page_for_assertion() {
-		By Sub_total=By.xpath("//td[@colspan='7']//child::span");
-		WebElement we_Sub_total=ult.WaitForElement(Sub_total, 10);
-		String Final_total=we_Sub_total.getText();
-		System.out.println(Final_total);
-		return Final_total;
+		WebElement we_SubTotal=Utils.WaitForElement(SubTotal, 10);
+		String FinalTotal=we_SubTotal.getText();
+		System.out.println(FinalTotal);
+		return FinalTotal;
 	}
 
 }

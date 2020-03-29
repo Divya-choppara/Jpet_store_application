@@ -16,6 +16,7 @@ import PAGES.Added_page;
 import PAGES.Assert_page;
 import PAGES.Click_register;
 import PAGES.Click_sign_in;
+import PAGES.InvalidLogIn;
 import PAGES.Login_page;
 import PAGES.Product_list;
 import PAGES.Register_page;
@@ -25,97 +26,112 @@ import PAGES.Successful_login;
 
 public class Test_Jpet extends Read_excel {
 	WebDriver driver;
-	Utilities ult;
-	Click_sign_in csi;
-	Click_register cr;
-	Register_page Rp;
-	Login_page Lp;
-	Search_page sp;
-	Add_to_cart ac;
-	Added_page ap;
-	Assert_page assert_p;
-	Successful_login Log_page;
-	Search_result ser_res;
-	Product_list pro_list;
+	Utilities utils;
+	Click_sign_in SignInButton;
+	Click_register RegisterButton;
+	Register_page Register;
+	Login_page Login;
+	Search_page Search;
+	Add_to_cart AddToCart;
+	Added_page AddedProduct;
+	Assert_page AssertPage;
+	Successful_login LoginPage;
+	Search_result SearchResult;
+	Product_list ProductList;
+	InvalidLogIn invalidlogin;
 	@BeforeClass
 	public void BeforeClass() 
 	{
-		ult=new Utilities(driver);
+		utils=new Utilities(driver);
 		get_data();
 	}
 	@BeforeMethod
 	public void BeforeMethod() 
 	{
-		driver=ult.Launch_browser("CHROME", "https://jpetstore.cfapps.io/catalog");
-		csi=new Click_sign_in(driver);
-		cr=new Click_register(driver);
-		Rp=new Register_page(driver);
-		Lp=new Login_page(driver);
-		sp=new Search_page(driver);
-		ac=new Add_to_cart(driver);
-		ap=new Added_page(driver);
-		Log_page=new Successful_login(driver);
-		assert_p=new Assert_page(driver);
-		ser_res=new Search_result(driver);
-		pro_list=new Product_list(driver);
+		driver=utils.Launch_browser("CHROME", "https://jpetstore.cfapps.io/catalog");
+		SignInButton=new Click_sign_in(driver);
+		RegisterButton=new Click_register(driver);
+		Register=new Register_page(driver);
+		Login=new Login_page(driver);
+		Search=new Search_page(driver);
+		AddToCart=new Add_to_cart(driver);
+		AddedProduct=new Added_page(driver);
+		LoginPage=new Successful_login(driver);
+		AssertPage=new Assert_page(driver);
+		SearchResult=new Search_result(driver);
+		ProductList=new Product_list(driver);
+		invalidlogin=new InvalidLogIn(driver);
 		
 		
 	}
 	
-	//Test method for register and Login and checking the successful login
+	//Scenario for valid credentials(register and Login)
   @Test(dataProvider="loginpage")
-  public void f(String un,String pd,String cpd,String nm,String ln,String eml,String ph,String a1,String a2,String ct,String st,String zp,String ctr,String uid,String pwd) 
+  public void RegisterAndLogin(String un,String pd,String cpd,String nm,String ln,String eml,String ph,String a1,String a2,String ct,String st,String zp,String ctr,String uid,String pwd) 
   {
-	  csi.clk_on_signin();
-	  cr.clk_on_register();
+	  SignInButton.clk_on_signin();
+	  RegisterButton.ClickOnRegisterButton();
 	  String phn=ph.substring(1, 10);
 	  String zpc=zp.substring(1, 6);
-	  Rp.do_reg(un,pd,cpd,nm,ln,eml,phn,a1,a2,ct,st,zpc,ctr);
-	  Lp.Login(uid,pwd);
-	  String Name_of_user=Log_page.Successful_login_page();
+	  Register.do_reg(un,pd,cpd,nm,ln,eml,phn,a1,a2,ct,st,zpc,ctr);
+	  Login.Login(uid,pwd);
+	  String Name_of_user=LoginPage.Successful_login_page();
 	  SoftAssert Assert=new SoftAssert();
 	  Assert.assertEquals(Name_of_user, "divya");
 	  Assert.assertAll();
-	  ult.Screenshot();
-	 
-	 
+	  utils.Screenshot();
+	}
+  
+  //Scenario for Invalid Credentials
+  @Test(dataProvider="loginpage")
+  public void InvalidLogin(String un,String pd,String cpd,String nm,String ln,String eml,String ph,String a1,String a2,String ct,String st,String zp,String ctr,String uid,String pwd) 
+  {
+	  SignInButton.clk_on_signin();
+	  Login.Login(un,pwd);
+	  String Errormesaage=invalidlogin.InvalidLogInPage();
+	  SoftAssert Assert=new SoftAssert();
+	  Assert.assertEquals(Errormesaage, "Credentials is invalid");
+	  Assert.assertAll();
+	  utils.Screenshot();
+	  
 	  
   }
+  
   @DataProvider(name="loginpage")
   public String[][] Provide_data()
   {
 	  return testdata;
   }
 	
-	//Test Method for login and search for the product and adding the product to the cart  and assertion of product price
+	//Scenario to check the final price of the product
   @Test(dataProvider="loginpage")
-	  public void test2(String un,String pd,String cpd,String nm,String ln,String eml,String ph,String a1,String a2,String ct,String st,String zp,String ctr,String uid,String pwd) 
+	  public void AddingToCart(String un,String pd,String cpd,String nm,String ln,String eml,String ph,String a1,String a2,String ct,String st,String zp,String ctr,String uid,String pwd) 
 	  { 
-		  csi.clk_on_signin();
-		  Lp.Login(uid,pwd);
-		  sp.search();
-		  ac.add_product();
-		  ap.adding();
-	      String SubTotal=assert_p.Page_for_assertion();
+	  SignInButton.clk_on_signin();
+	  Login.Login(uid,pwd);
+	  Search.search();
+	  AddToCart.AddProduct();
+	  AddedProduct.adding();
+	      String SubTotal=AssertPage.Page_for_assertion();
 	      SoftAssert Assert=new SoftAssert();
 	      Assert.assertEquals(SubTotal, "16.05");
 	      Assert.assertAll();
-	      ult.Screenshot();
+	      utils.Screenshot();
 	  
 	  }
-  //Test Method for Login and Search for the product and assertion of product name
+  //Scenario for valid search
 	  @Test(dataProvider="loginpage")
-	  public void test3(String un,String pd,String cpd,String nm,String ln,String eml,String ph,String a1,String a2,String ct,String st,String zp,String ctr,String uid,String pwd)
+	  public void Search(String un,String pd,String cpd,String nm,String ln,String eml,String ph,String a1,String a2,String ct,String st,String zp,String ctr,String uid,String pwd)
 	  {
-		  csi.clk_on_signin();
-		  Lp.Login(uid,pwd);
-		  sp.search();
-		  ser_res.Search_result_page();
-		  String Product_name=pro_list.product_list_page();
+		  SignInButton.clk_on_signin();
+		  Login.Login(uid,pwd);
+		  Search.search();
+		  SearchResult.Search_result_page();
+		  String Product_name=ProductList.product_list_page();
 		  SoftAssert Assert=new SoftAssert();
 	      Assert.assertEquals(Product_name, "Angelfish");
 	      Assert.assertAll();
-	      ult.Screenshot();
+	      utils.Screenshot();
 	  }
 	  @AfterMethod
 	  public void aftermethod()

@@ -8,19 +8,20 @@ import BASE_CLASSES.Utilities;
 
 public class Search_result {
 	WebDriver driver;
-	Utilities ult;
+	Utilities Utils;
+	By ResultPage=By.xpath("//a[@href='/catalog/products/FI-SW-01']");
+
 	public Search_result(WebDriver driver) 
 	{
 		this.driver=driver;
-		ult=new Utilities(driver);
+		Utils=new Utilities(driver);
 	}
 	
 	//To click on particular fish type 
 	public void Search_result_page()
 	{
-		By res_page=By.xpath("//a[@href='/catalog/products/FI-SW-01']");
-		WebElement we_res_page=ult.WaitForElement(res_page, 10);
-		we_res_page.click();
+		WebElement Ele_ResultPage=Utils.WaitForElement(ResultPage, 10);
+		Ele_ResultPage.click();
 	}
 
 }

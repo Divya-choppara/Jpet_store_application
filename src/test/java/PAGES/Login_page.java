@@ -10,40 +10,41 @@ import BASE_CLASSES.Utilities;
 
 public class Login_page {
 	
-	 Utilities wt;
-		WebDriver dr;
-		public Login_page(WebDriver dr)
+	    Utilities Utils;
+		WebDriver driver;
+		By UserId= By.xpath("//input[@name='username']");
+		By PassWord= By.xpath("//input[@name='password']");
+		By ClickOnLogin= By.xpath("//input[@id='login']");
+		
+		public Login_page(WebDriver driver)
 		{
-			this.dr=dr;
-			wt=new Utilities(dr);
+			this.driver=driver;
+			Utils=new Utilities(driver);
 		}
 		//To give user name
-		public void username(String uid)
+		public void username(String UserName)
 		{
-			By by_uid= By.xpath("//input[@name='username']");
-			WebElement we_uid =wt.ElementToBeClickable(by_uid,10);
-			we_uid.sendKeys(uid);
+			WebElement Ele_UserId =Utils.ElementToBeClickable(UserId,10);
+			Ele_UserId.sendKeys(UserName);
 		}
 		//To give password
-		public void password(String pwd)
+		public void password(String password)
 		{
-			By by_pwd= By.xpath("//input[@name='password']");
-			WebElement we_pwd =wt.ElementToBeClickable(by_pwd,10);
-			we_pwd.sendKeys(pwd);
+			WebElement Ele_PassWord =Utils.ElementToBeClickable(PassWord,10);
+			Ele_PassWord.sendKeys(password);
 		}
 		//To click on login button 
-		public void clickBTN()
+		public void clickbutton()
 		{
-			By byclk= By.xpath("//input[@id='login']");
-			WebElement we_clk =wt.ElementToBeClickable(byclk,10);
-			we_clk.click();
+			WebElement Ele_ClickOnLogin =Utils.ElementToBeClickable(ClickOnLogin,10);
+			Ele_ClickOnLogin.click();
 		}
 		//Method for login 
-		public void Login(String uid,String pwd)
+		public void Login(String userid,String Password)
 		{
-			this.username(uid);
-			this.password(pwd);
-			this.clickBTN();
+			this.username(userid);
+			this.password(Password);
+			this.clickbutton();
 			
 		}
 

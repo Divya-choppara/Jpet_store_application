@@ -8,18 +8,19 @@ import BASE_CLASSES.Utilities;
 
 public class Click_register {
 	WebDriver driver;
-	Utilities ult;
+	Utilities Utils;
+	By ClickOnRegister=By.xpath("//div[@id='Catalog']//a");
 	public Click_register(WebDriver driver) 
 	{
 		this.driver=driver;
-		ult=new Utilities(driver);
+		Utils=new Utilities(driver);
 	}
 	//To click on register now to register with new user details
-	public void clk_on_register() 
+	public void ClickOnRegisterButton() 
 	{
-		By cr=By.xpath("//div[@id='Catalog']//a");
-		WebElement we_cr=ult.ElementToBeClickable(cr, 20);
-		we_cr.click();
+		
+		WebElement Element_ClickOnRegister=Utils.ElementToBeClickable(ClickOnRegister, 20);
+		Element_ClickOnRegister.click();
 		
 	}
 

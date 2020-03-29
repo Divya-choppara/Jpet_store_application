@@ -6,12 +6,12 @@ import org.openqa.selenium.WebElement;
 
 import BASE_CLASSES.Utilities;
 
-public class Add_to_cart {
+public class InvalidLogIn {
 	WebDriver driver;
 	Utilities Utils;
-	By AddProductToCart=By.xpath("//div[@id='Catalog'][1]//child::a[@href='/catalog/products/FI-SW-01'][1]");
+	By ErrorMessage=By.xpath("//li[@class='error']");
 	
-	public Add_to_cart(WebDriver driver)
+	public InvalidLogIn(WebDriver driver)
 	{
 		this.driver=driver;
 		Utils=new Utilities(driver);
@@ -19,10 +19,11 @@ public class Add_to_cart {
 	}
 	
 	//To add the product into the cart
-	public void AddProduct()
+	public String InvalidLogInPage()
 	{
-		WebElement Ele_AddProductToCart=Utils.ElementToBeClickable(AddProductToCart, 10);
-		Ele_AddProductToCart.click();
+		WebElement Ele_ErrorMessage=Utils.ElementToBeClickable(ErrorMessage, 10);
+		String Error=Ele_ErrorMessage.getText();
+		return Error;
 	}
 
 }
